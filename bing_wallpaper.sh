@@ -189,14 +189,14 @@ while true; do
 	    # Extract the relative URL of the Bing pic of the day from
 	    # the XML data retrieved from xmlURL, form the fully qualified
 	    # URL for the pic of the day, and store it in $picURL
-	    picURL=$bing$(echo $(curl -s $xmlURL) | egrep -o "<urlBase>(.*)</urlBase>" | cut -d ">" -f 2 | cut -d "<" -f 1)$picRes$picExt
+	    picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<urlBase>(.*)</urlBase>" | cut -d ">" -f 2 | cut -d "<" -f 1)$picRes$picExt
 	    
 	    # $picName contains the filename of the Bing pic of the day
 	    # picName=${picURL##*/}
 	    picName="bing_wallpaper_$$$picExt"
 	
 	    # Download the Bing pic of the day
-	    curl -s -o $saveDir$picName -L "$picURL"
+	    curl -H "Content-Type: text/html; charset=UTF-8" -s -o $saveDir$picName -L "$picURL"
 	
 	    # Test if download was successful.
 	    downloadResult=$?
@@ -204,9 +204,9 @@ while true; do
 		rm -f $saveDir$picName && continue
 	    fi
 	
-	    if [ -x "/usr/bin/convert" ]; then
-	    	title=$(echo $(curl -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
-	    	convert -background "#00000080" -fill white -gravity center -size 1024 -font "Droid Sans" -pointsize 22 caption:"${title}" $saveDir$picName +swap -gravity south -composite $saveDir$picName
+	    if [ -s $saveDir$picName -a -x "/usr/bin/convert" ]; then
+	    	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )   	
+		convert -background "#00000080" -fill white -gravity center -size 1024 -font "Droid Sans" -pointsize 22 caption:"${title}" $saveDir$picName +swap -gravity south -composite $saveDir$picName
     	    fi
 	    # Test if it's a pic
 	    file --mime-type -b $saveDir$picName | grep "^image/" > /dev/null && break
@@ -252,7 +252,7 @@ while true; do
 	fn=$saveDir$picName
 	osascript -e 'tell application "Finder" to set desktop picture to POSIX file "'"$fn"'"'
 	osaResult=$?
-	sqlite3 ~/Library/Application\ Support/Dock/desktoppicture.db "update data set value = '$fn'" && killall Dock 
+	sqlite3 ~/Library/Application\ Support/Dock/desktoppicture.db "update data set value = '$fn'"
 	sqliteResult=$?
 	if [ $osaResult -ge 1 -a $sqliteResult -ge 1 ]; then
 		echo "Failed to refresh desktop image."
