@@ -53,12 +53,12 @@ detectDE() {
 
     if [ x"$DE" = x"" ]; then
       # classic fallbacks
-      if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
-      elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
-      elif [ x"$MATE_DESKTOP_SESSION_ID" != x"" ]; then DE=mate;
-      elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE=gnome;
-      elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
-      elif xprop -root 2> /dev/null | grep -i '^xfce_desktop_window' >/dev/null 2>&1; then DE=xfce
+      if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE="kde";
+      elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE="gnome";
+      elif [ x"$MATE_DESKTOP_SESSION_ID" != x"" ]; then DE="mate";
+      elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE="gnome";
+      elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE="xfce";
+      elif xprop -root 2> /dev/null | grep -i '^xfce_desktop_window' >/dev/null 2>&1; then DE="xfce"
       fi
     fi
 
@@ -202,10 +202,13 @@ while true; do
 	    downloadResult=$?
 	    if [ $downloadResult -ge 1 ]; then
 		rm -f $saveDir$picName && continue
+	    elif [ ! -s $saveDir$picName ]; then
+	    	rm -f $saveDir$picName && continue   
 	    fi
-	
-	    if [ -s $saveDir$picName -a -x "/usr/bin/convert" ]; then
-	    	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )   	
+	    
+	    if [ -x "/usr/bin/convert" ]; then
+	    	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
+	    	convert $saveDir$picName -resize 1920x1200 $saveDir$picName
 		convert -background "#00000080" -fill white -gravity center -size 1024 -font "Droid Sans" -pointsize 22 caption:"${title}" $saveDir$picName +swap -gravity south -composite $saveDir$picName
     	    fi
 	    # Test if it's a pic
