@@ -58,7 +58,7 @@ detectDE() {
       elif [ x"$MATE_DESKTOP_SESSION_ID" != x"" ]; then DE="mate";
       elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE="gnome";
       elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE="xfce";
-      elif xprop -root 2> /dev/null | grep -i '^xfce_desktop_window' >/dev/null 2>&1; then DE="xfce"
+      elif xprop -root 2> /dev/null | grep -i '^xfce_desktop_window' >/dev/null 2>&1; then DE="xfce";
       fi
     fi
 
@@ -178,6 +178,9 @@ picOpts="stretched"
 # The file extension for the Bing pic
 picExt=".jpg"
 
+# Initialize counter for mac pictures
+maccount=1
+
 # Download the highest resolution
 while true; do
 
@@ -253,16 +256,46 @@ while true; do
       pcmanfm-qt -w $saveDir$picName
     elif [ "$DE" = "mac" ]; then
 	fn=$saveDir$picName
-	osascript -e 'tell application "Finder" to set desktop picture to POSIX file "'"$fn"'"'
-	osaResult=$?
-	sqlite3 ~/Library/Application\ Support/Dock/desktoppicture.db "update data set value = '$fn'"
+	# python - $fn << EOF
+# from appscript import app, mactypes
+# import argparse
+#
+# def __main__():
+#  parser = argparse.ArgumentParser(description='Set desktop wallpaper.')
+#  parser.add_argument('file', type=file, help='File to use as wallpaper.')
+#  args = parser.parse_args()
+#  f = args.file
+  # app('finder').desktop_picture.set(mactypes.File(f.name))
+  # se = app('System Events')
+  # desktops = se.desktops.display_name.get()
+  # for d in desktops:
+  #  desk = se.desktops[its.display_name == d]
+  #  desk.picture.set(mactypes.File(f.name))
+#
+#
+# __main__()
+#
+# EOF	
+	maccount=$(expr $maccount + 1)
+	fnnew="bing_wallpaper_$$$maccount$picExt"
+	fnnew=$saveDir$fnnew
+	mv $fn $fnnew
+	rm -f $fnold
+
+	osascript -e 'tell application "Finder" to set desktop picture to POSIX file "'"$fnnew"'"'
+	osafirstResult=$?
+	osascript -e 'tell application "System Events" to set picture of every desktop to "'"$fnnew"'"'
+	osasecondResult=$?
+	sqlite3 ~/Library/Application\ Support/Dock/desktoppicture.db "update data set value = '$fnnew'" 2>&1 >/dev/null
 	sqliteResult=$?
-	if [ $osaResult -ge 1 -a $sqliteResult -ge 1 ]; then
-		echo "Failed to refresh desktop image."
-	        echo "Try again in 60 seconds."
-		sleep 60
-		continue
-	fi
+
+	fnold=$fnnew
+	# if [ $osafirstResult -ge 1 -a $osasecondResult -ge 1 -a $sqliteResult -ge 1 ]; then
+	#	echo "Failed to refresh desktop image."
+	#        echo "Try again in 60 seconds."
+	#	sleep 60
+	#	continue
+	# fi
     elif [ "$DE" = "mate" ]; then
       dconf write /org/mate/desktop/background/picture-filename '"'$saveDir$picName'"'
     elif [ "$DE" = "xfce" ]; then
@@ -277,6 +310,8 @@ while true; do
     # sleep for half a day
     DIFF_TIME=0
     LAST_RUN=$(date +%s)
+    LAST_DAY=$(date +%A)
+    LAST_HOUR=$(date +%I)
     while [ $DIFF_TIME -lt 43199 ]; do
 	NOW=$(date +%s)
 	DIFF_TIME=$(expr $NOW - $LAST_RUN)
