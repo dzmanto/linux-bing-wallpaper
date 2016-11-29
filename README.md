@@ -37,7 +37,7 @@ exit
 
 ## Example cron autostart (crontab -e for your user, run at startup, tried and tested also on Mac OSX computers)
 ```
-@ reboot /usr/bin/bing_wallpaper.sh
+@reboot /usr/bin/bing_wallpaper.sh
 ```
 
 ## Example cron usage (crontab -e for your user)
