@@ -1,8 +1,8 @@
 # Linux Bing Wallpaper Shell Scripts
 
-It sets www.bing.com wallpaper of the say as your linux desktop
+It sets the <a href="http://www.bing.com">bing</a> wallpaper of the day as your Mac OSX or linux desktop.
 
-supports Mac OSX, Ubuntu Unity, GNOME (2 and 3) KDE4, and XFCE4.
+It supports Mac OSX, Ubuntu Unity, GNOME (2 and 3) KDE4, and XFCE4.
 
 ## Usage
 
