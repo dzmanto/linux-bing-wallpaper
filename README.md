@@ -22,21 +22,21 @@ Next boots it will run too, but do nothing.
 
 ## Easy commands
 ```
-        cd /usr/bin
-        su
-        wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/bing_wallpaper.sh -o bin/bing_wallpaper.sh
-        # If you use KDE
-        wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/kde4_set_wallpaper.sh -o bin/kde4_set_wallpaper.sh
-        chmod +x bin/*.sh
-        exit
+cd /usr/bin
+su
+wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/bing_wallpaper.sh -o bin/bing_wallpaper.sh
+# If you use KDE
+wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/kde4_set_wallpaper.sh -o bin/kde4_set_wallpaper.sh
+chmod +x bin/*.sh
+exit
 
-        # Default behavior
-        /usr/bin/bing_wallpaper.sh
+# Default behavior
+/usr/bin/bing_wallpaper.sh
 
-        # First param is Market
-        # Second param is true to exit immediately if you want to use a cron
-        # (otherwise, script will sleep 24 hrs)
-        /usr/bin/bing_wallpaper.sh en-US true
+# First param is Market
+# Second param is true to exit immediately if you want to use a cron
+# (otherwise, script will sleep 24 hrs)
+/usr/bin/bing_wallpaper.sh en-US true
 ```
 
 ## Example cron usage (crontab -e for your user, run at startup, tried and tested also on Mac OSX computers)
