@@ -14,15 +14,13 @@ Change mkt varible in bing_wallpaper.sh to your market (valid values are: en-US,
 
 Give the scripts execution permissions.
 
-Make them autostart. (Google is your friend)
+Make them autostart. (see the below comments for Mac OSX, gnome-session-properties is your friend on Ubuntu)
 
-So next time you boot your computer for the first time a day, it'll run once.
+So next time you boot your computer for the first time a day, it will run once.
 
-Next boots it will run too, but do nothing.
-
-## Easy commands
+## Installation & first steps
 ```
-cd /usr/bin
+cd /usr, /bin
 su
 wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/bing_wallpaper.sh -o bin/bing_wallpaper.sh
 # If you use KDE
@@ -39,7 +37,7 @@ exit
 /usr/bin/bing_wallpaper.sh en-US true
 ```
 
-## Example cron usage (crontab -e for your user, run at startup, tried and tested also on Mac OSX computers)
+## Example cron autostart (crontab -e for your user, run at startup, tried and tested also on Mac OSX computers)
 ```
 @ reboot /usr/bin/bing_wallpaper.sh
 ```
@@ -49,3 +47,4 @@ exit
 # m h dom mon dow command
 * * * * * /usr/bin/bing_wallpaper.sh en-US true
 ```
+<p>A similar solution is <a href="https://github.com/dzmanto/bang">available</a> for Microsoft Windows machines. </p>
