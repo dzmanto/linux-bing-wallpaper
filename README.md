@@ -4,23 +4,21 @@ It sets the <a href="http://www.bing.com">bing</a> wallpaper of the day as your 
 
 It supports Mac OSX, Ubuntu Unity, GNOME (2 and 3) KDE4, and XFCE4.
 
-## Usage
+## Installation
 
-Download these two scripts.
+Download the shell .sh scripts.
 
 Put them somewhere (/usr/bin for example)
 
-Change mkt varible in bing_wallpaper.sh to your market (valid values are: en-US, zh-CN, ja-JP, en-AU, en-UK, de-DE, en-NZ, en-CA)
+Give the scripts execution permissions (chmod +x).
 
-Give the scripts execution permissions.
+Make them autostart (see the below comments for Mac OSX, gnome-session-properties is your friend on Ubuntu).
 
-Make them autostart. (see the below comments for Mac OSX, gnome-session-properties is your friend on Ubuntu)
+So next time you start your machine, linux-bing-wallpaper will run once.
 
-So next time you boot your computer for the first time a day, it will run once.
-
-## Installation & first steps
+## Commands for installation & first steps
 ```
-cd /usr, /bin
+cd /usr/bin
 su
 wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/bing_wallpaper.sh -o bin/bing_wallpaper.sh
 # If you use KDE
