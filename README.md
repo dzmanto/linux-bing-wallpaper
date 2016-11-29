@@ -2,7 +2,7 @@
 
 It sets the <a href="http://www.bing.com">bing</a> wallpaper of the day as your Mac OSX or linux desktop.
 
-It supports Mac OSX, Ubuntu Unity, GNOME (2 and 3) KDE4, and XFCE4.
+It supports Mac OSX®, Ubuntu Unity®, GNOME (2 and 3) KDE4, and XFCE4.
 
 ## Installation
 
@@ -35,7 +35,7 @@ exit
 /usr/bin/bing_wallpaper.sh en-US true
 ```
 
-## Example cron autostart (crontab -e for your user, run at startup, tried and tested also on Mac OSX computers)
+## Example cron autostart (crontab -e for your user, run at startup, tried and tested also on Mac OSX® computers)
 ```
 @reboot /usr/bin/bing_wallpaper.sh
 ```
@@ -45,4 +45,4 @@ exit
 # m h dom mon dow command
 * * * * * /usr/bin/bing_wallpaper.sh en-US true
 ```
-<p>A similar solution is <a href="https://github.com/dzmanto/bang">available</a> for Microsoft Windows machines. </p>
+<p>A similar solution is <a href="https://github.com/dzmanto/bang">available</a> for Microsoft Windows® machines. </p>
