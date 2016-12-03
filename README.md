@@ -1,44 +1,47 @@
 # Linux Bing Wallpaper Shell Scripts
 
-It sets Bing.com wallpaper of the Day as your Linux Desktop
+It sets the <a href="http://www.bing.com">bing</a> wallpaper of the day as your Mac OSX or linux desktop.
 
-supports XFCE4, GNOME (2 and 3) and KDE4.
+It supports Mac OSX®, Ubuntu Unity®, GNOME (2 and 3) KDE4, and XFCE4.
 
-## Usage
+## Installation
 
-Download these two scripts.
+Download the shell .sh scripts.
 
-Put them somewhere (~/bin for example)
+Put them somewhere (/usr/bin for example)
 
-Change mkt varible in bing_wallpaper.sh to your market (valid values are: en-US, zh-CN, ja-JP, en-AU, en-UK, de-DE, en-NZ, en-CA)
+Give the scripts execution permissions (chmod +x).
 
-Give the scripts execution permissions.
+Make them autostart (see the below comments for Mac OSX, gnome-session-properties is your friend on Ubuntu).
 
-Make them autostart. (Google is your friend)
+So next time you start your machine, linux-bing-wallpaper will run once.
 
-So next time you boot your computer for the first time a day, it'll run once.
-
-Next boots it will run too, but do nothing.
-
-## Easy commands
-
-        cd ~
-        mkdir bin
-        wget https://raw.githubusercontent.com/marguerite/linux-bing-wallpaper/master/bing_wallpaper.sh -o bin/bing_wallpaper.sh
-        # If you use KDE
-        wget https://raw.githubusercontent.com/marguerite/linux-bing-wallpaper/master/kde4_set_wallpaper.sh -o bin/kde4_set_wallpaper.sh
-        chmod +x bin/*.sh
-
-        # Default behavior
-        ./bin/bing_wallpaper.sh
-
-        # First param is Market
-        # Second param is true to exit immediately if you want to use a cron
-        # (otherwise, script will sleep 24 hrs)
-        ./bin/bing_wallpaper.sh en-US true
-
-## Example cron usage (crontab -e for your user)
+## Commands for installation & first steps
 ```
-# m h dom mon dow command
-* * * * * ~/bin/bing_wallpaper.sh en-US true
+cd /usr/bin
+su
+wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/bing_wallpaper.sh -o bin/bing_wallpaper.sh
+# If you use KDE
+wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/kde4_set_wallpaper.sh -o bin/kde4_set_wallpaper.sh
+chmod +x bin/*.sh
+exit
+
+# Default behavior
+/usr/bin/bing_wallpaper.sh
+
+# First param is Market
+# Second param is true to exit immediately if you want to use a cron
+# (otherwise, script will sleep 24 hrs)
+/usr/bin/bing_wallpaper.sh en-US true
 ```
+
+## autostart through cron the easy way (tried and tested also on Mac OSX® computers)
+```
+( crontab -l ; echo "@reboot /usr/bin/bing_wallpaper.sh" ) | crontab - 2>&1 >/dev/null
+```
+
+## autostart through cron, if the easy way does not work (crontab -e for your user)
+```
+@reboot /usr/bin/bing_wallpaper.sh
+```
+<p>A similar solution is <a href="https://github.com/dzmanto/bang">available</a> for Microsoft Windows® machines. </p>
