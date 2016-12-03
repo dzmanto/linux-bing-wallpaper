@@ -35,14 +35,13 @@ exit
 /usr/bin/bing_wallpaper.sh en-US true
 ```
 
-## Example cron autostart (crontab -e for your user, run at startup, tried and tested also on Mac OSX® computers)
+## autostart through cron the easy way (tried and tested also on Mac OSX® computers)
 ```
-@reboot /usr/bin/bing_wallpaper.sh
+( crontab -l ; echo "@reboot /usr/bin/bing_wallpaper.sh" ) | crontab - 2>&1 >/dev/null
 ```
 
-## Example cron usage (crontab -e for your user)
+## autostart through cron, if the easy way does not work (crontab -e for your user)
 ```
-# m h dom mon dow command
-* * * * * /usr/bin/bing_wallpaper.sh en-US true
+@reboot /usr/bin/bing_wallpaper.sh
 ```
 <p>A similar solution is <a href="https://github.com/dzmanto/bang">available</a> for Microsoft Windows® machines. </p>
