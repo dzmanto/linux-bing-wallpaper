@@ -166,7 +166,7 @@ xmlURL="http://www.bing.com/HPImageArchive.aspx?format=xml&idx=$idx&n=1&mkt=$mkt
 
 # $saveDir is used to set the location where Bing pics of the day
 # are stored.  $HOME holds the path of the current user's home directory
-saveDir=$HOME'/Pictures/Bing/'
+saveDir="/tmp/"
 
 # Create saveDir if it does not already exist
 mkdir -p $saveDir
@@ -209,7 +209,7 @@ while true; do
 	    	rm -f $saveDir$picName && continue   
 	    fi
 	    
-	    if [ -x "/usr/bin/convert" ]; then
+	    if [ -x "/usr/bin/convert" -a -x "/usr/bin/mogrify" ]; then
 	    	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
 	    	convert $saveDir$picName -resize 1920x1200 $saveDir$picName
 		convert -background "#00000080" -fill white -gravity center -size 1024 -font "Droid Sans" -pointsize 22 caption:"${title}" $saveDir$picName +swap -gravity south -composite $saveDir$picName
@@ -248,10 +248,34 @@ while true; do
       # Set the GNOME 3 wallpaper picture options
       DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-options $picOpts
       gsettings set org.gnome.desktop.background picture-uri '"file://'$saveDir$picName'"'
-    elif [ "$DE" = "kde" ]; then
-      test -e /usr/bin/xdotool || sudo zypper --no-refresh install xdotool
-      test -e /usr/bin/gettext || sudo zypper --no-refresh install gettext-runtime
-      ./kde4_set_wallpaper.sh $saveDir$picName
+    elif [ "$DE" = "kde" -a -x "/usr/bin/xdotool" -a -x "/usr/bin/gettext" ]; then
+
+	LOCALE=$(echo $LANG | sed 's/\..*$//')
+
+	EN_CONSOLE1="Desktop Shell Scripting Console"
+	EN_CONSOLE2="Plasma Desktop Shell"
+
+	if [ -n $LOCALE ]; then
+		JS_CONSOLE1=$(LANGUAGE=$LOCALE gettext -d plasma-desktop -s "$EN_CONSOLE1")
+		JS_CONSOLE2=$(LANGUAGE=$LOCALE gettext -d plasma-desktop -s "$EN_CONSOLE2")
+		JS_CONSOLE="$JS_CONSOLE1 – $JS_CONSOLE2"
+	else
+		JS_CONSOLE="$EN_CONSOLE1 – $EN_CONSOLE2"
+	fi
+
+	js=$(mktemp)
+	cat << _EOF > $js
+var wallpaper = "$saveDir$picName";
+var activity = activities()[0];
+activity.currentConfigGroup = new Array("Wallpaper", "image");
+activity.writeConfig("wallpaper", wallpaper);
+activity.writeConfig("userswallpaper", wallpaper);
+activity.reloadConfig();
+_EOF
+	qdbus org.kde.plasma-desktop /App local.PlasmaApp.loadScriptInInteractiveConsole "$js" > /dev/null
+	xdotool search --name "$JS_CONSOLE" windowactivate key ctrl+e key ctrl+w
+	rm -f "$js"
+
     elif [ "$DE" = "lxqt" ] ; then
       pcmanfm-qt -w $saveDir$picName
     elif [ "$DE" = "mac" ]; then
