@@ -18,6 +18,7 @@ So next time you start your machine, linux-bing-wallpaper will run once.
 
 ## Commands for installation & first steps
 ```
+# change to target folder
 cd /usr/bin
 su
 # download the script
