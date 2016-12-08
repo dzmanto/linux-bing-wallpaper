@@ -2,7 +2,7 @@
 
 It sets the <a href="http://www.bing.com">bing</a> wallpaper of the day as your Mac OSX® or linux desktop.
 
-It supports Mac OSX®, Ubuntu Unity®, GNOME (2 and 3) KDE4, and XFCE4.
+It supports Mac OSX®, <a href="https://www.ubuntu.com/">Ubuntu</a> Unity®, GNOME (2 and 3) KDE4, and XFCE4.
 
 ## Installation
 
@@ -12,7 +12,7 @@ Put them somewhere (/usr/bin for example)
 
 Give the scripts execution permissions (chmod +x).
 
-Make them autostart (see the below comments for Mac OSX®, gnome-session-properties is your friend on Ubuntu).
+Make them autostart (see the below comments for Mac OSX®, gnome-session-properties is your friend on <a href="https://www.ubuntu.com/">Ubuntu</a>).
 
 So next time you start your machine, linux-bing-wallpaper will run once.
 
