@@ -12,7 +12,7 @@ Put them somewhere (/usr/bin for example)
 
 Give the scripts execution permissions (chmod +x).
 
-Make them autostart (see the below comments for Mac OSX®, gnome-session-properties is your friend on <a href="https://www.ubuntu.com/">Ubuntu</a>).
+Make them autostart (see the below comments for Mac OSX®, gnome-session-properties is your friend in <a href="https://www.ubuntu.com/">Ubuntu</a>).
 
 So next time you start your machine, linux-bing-wallpaper will run once.
 
