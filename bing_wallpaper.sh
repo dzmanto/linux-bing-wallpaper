@@ -323,7 +323,15 @@ _EOF
     elif [ "$DE" = "mate" ]; then
       dconf write /org/mate/desktop/background/picture-filename '"'$saveDir$picName'"'
     elif [ "$DE" = "xfce" ]; then
-      ./xfce4_set_wallpaper.sh $saveDir$picName
+	tool=$(which xfconf-query)
+	if [ -x $tool ]; then
+		# set to every monitor that contains image-path/last-image
+		properties=$(xfconf-query -c xfce4-desktop -p /backdrop -l | grep -e "screen.*/monitor.*image-path$" -e "screen.*/monitor.*/last-image$")
+
+		for property in $properties; do
+			xfconf-query -c xfce4-desktop -p $property -s "$saveDir$picName"
+		done
+	fi
     fi
 
     if [ "$exitAfterRunning" = true ] ; then
