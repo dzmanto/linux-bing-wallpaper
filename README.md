@@ -6,13 +6,13 @@ It supports Mac OSX®, <a href="https://www.ubuntu.com/">Ubuntu</a> Unity®, GNO
 
 ## Installation
 
-Download the shell .sh scripts.
+Download the bing_wallpaper.sh script.
 
-Put them somewhere (such as the folder /usr/bin)
+Put it somewhere (such as the folder /usr/bin)
 
-Give the scripts execution permissions (chmod +x).
+Give the script execution permissions (chmod +x).
 
-Make them autostart (see the below comments for Mac OSX®, in <a href="https://www.ubuntu.com/">Ubuntu</a> gnome-session-properties is your friend).
+Make it autostart (see the below comments for Mac OSX®, in <a href="https://www.ubuntu.com/">Ubuntu</a> gnome-session-properties is your friend).
 
 The next time you start your machine, linux-bing-wallpaper will run.
 
