@@ -1,4 +1,4 @@
-# Linux Bing Wallpaper Shell Scripts
+# Linux Bing Wallpaper Shell Script
 
 It sets the <a href="http://www.bing.com">bing</a> wallpaper of the day as your Mac OSX® or linux desktop.
 
