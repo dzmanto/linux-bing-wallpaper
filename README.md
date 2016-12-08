@@ -31,7 +31,7 @@ exit
 
 # The first parameter indicates market.
 # Setting the second parameter to true indicates immediate exit.
-# The script will otherwise sleep for 12 hours.
+# The script will otherwise sleep for twelve hours.
 /usr/bin/bing_wallpaper.sh en-US true
 ```
 
