@@ -8,7 +8,7 @@ It supports Mac OSX®, <a href="https://www.ubuntu.com/">Ubuntu</a> Unity®, GNO
 
 Download the shell .sh scripts.
 
-Put them somewhere (/usr/bin for example)
+Put them somewhere (such as the folder /usr/bin)
 
 Give the scripts execution permissions (chmod +x).
 
