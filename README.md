@@ -8,7 +8,7 @@ It supports Mac OSX®, <a href="https://www.ubuntu.com/">Ubuntu</a> Unity®, GNO
 
 Download the <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/bing_wallpaper.sh">bing_wallpaper.sh</a> script.
 
-Put it somewhere (such as the folder /usr/bin)
+Put it somewhere (such as the folder /usr/bin).
 
 Give the script execution permissions (chmod +x).
 
