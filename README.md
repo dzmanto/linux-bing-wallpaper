@@ -29,8 +29,8 @@ exit
 # Run linux-bing-wallpaper with default settings
 /usr/bin/bing_wallpaper.sh
 
-# The first parameter is market
-# Set the second parameter to true indicate immediate exit immediately
+# The first parameter indicates market.
+# Set the second parameter to true indicate immediate exit.
 # (otherwise, script will sleep for 12 hours)
 /usr/bin/bing_wallpaper.sh en-US true
 ```
