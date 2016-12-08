@@ -20,18 +20,18 @@ So next time you start your machine, linux-bing-wallpaper will run once.
 ```
 cd /usr/bin
 su
+# download the script
 wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/bing_wallpaper.sh -o bin/bing_wallpaper.sh
-# If you use KDE
-wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/kde4_set_wallpaper.sh -o bin/kde4_set_wallpaper.sh
+# mark the script as executable
 chmod +x bin/*.sh
 exit
 
-# Default behavior
+# Run linux-bing-wallpaper with default settings
 /usr/bin/bing_wallpaper.sh
 
-# First param is Market
-# Second param is true to exit immediately if you want to use a cron
-# (otherwise, script will sleep 24 hrs)
+# The first parameter is market
+# Set the second parameter to true indicate immediate exit immediately
+# (otherwise, script will sleep for 12 hours)
 /usr/bin/bing_wallpaper.sh en-US true
 ```
 
