@@ -19,6 +19,17 @@ contains() {
     return 1
 }
 
+
+checkdep() {
+	tool=$(which $1)
+	if [ ! -x "$tool" ]; then
+		echo "Linux-bing-wallpaper depends on $1."
+		echo "Install $1, please."
+		echo "Exit."
+		exit 1
+	fi
+}
+
 detectDE() {
     # see https://bugs.freedesktop.org/show_bug.cgi?id=34164
     unset GREP_OPTIONS
@@ -64,7 +75,7 @@ detectDE() {
 
     if [ x"$DE" = x"" ]; then
       # fallback to checking $DESKTOP_SESSION
-      case "$DESKTOP_SESSION" in
+     case "$DESKTOP_SESSION" in
          'gnome')
            DE="gnome"
            ;;
@@ -88,6 +99,9 @@ detectDE() {
     
     echo $DE
 }
+
+checkdep "curl"
+checkdep "egrep"
 
 if [ $# -eq 0 ]; then
   # The mkt parameter determines which Bing market you would like to
@@ -236,20 +250,23 @@ while true; do
           # Set the Cinnamon wallpaper picture options
           DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.cinnamon.desktop.background picture-options $picOpts
     elif [ "$DE" = "gnome" ]; then
+	checkdep "gconftool"
 	# Set the GNOME 2 wallpaper
 	gconftool-2 -s -t string /desktop/gnome/background/picture_filename "$saveDir$picName"
 	
 	# Set the GNOME 2 wallpaper picture options
 	gconftool-2 -s -t string /desktop/gnome/background/picture_options "$picOpts"
     elif [ "$DE" = "gnome3" ]; then
-      # Set the GNOME3 wallpaper
-      DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-uri '"file://'$saveDir$picName'"'
+	checkdep "gsettings"
+	# Set the GNOME3 wallpaper
+	DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-uri '"file://'$saveDir$picName'"'
 
-      # Set the GNOME 3 wallpaper picture options
-      DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-options $picOpts
-      gsettings set org.gnome.desktop.background picture-uri '"file://'$saveDir$picName'"'
-    elif [ "$DE" = "kde" -a -x "/usr/bin/xdotool" -a -x "/usr/bin/gettext" ]; then
-
+	# Set the GNOME 3 wallpaper picture options
+	DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-options $picOpts
+	gsettings set org.gnome.desktop.background picture-uri '"file://'$saveDir$picName'"'
+    elif [ "$DE" = "kde" ]; then
+	checkdep "xdotool"
+	checkdep "gettext"
 	LOCALE=$(echo $LANG | sed 's/\..*$//')
 
 	EN_CONSOLE1="Desktop Shell Scripting Console"
@@ -321,17 +338,16 @@ _EOF
 	#	continue
 	# fi
     elif [ "$DE" = "mate" ]; then
+      checkdep "dconf"
       dconf write /org/mate/desktop/background/picture-filename '"'$saveDir$picName'"'
     elif [ "$DE" = "xfce" ]; then
-	tool=$(which xfconf-query)
-	if [ -x $tool ]; then
-		# set to every monitor that contains image-path/last-image
-		properties=$(xfconf-query -c xfce4-desktop -p /backdrop -l | grep -e "screen.*/monitor.*image-path$" -e "screen.*/monitor.*/last-image$")
+	checkdep "xfconf-query"
+	# set to every monitor that contains image-path/last-image
+	properties=$(xfconf-query -c xfce4-desktop -p /backdrop -l | grep -e "screen.*/monitor.*image-path$" -e "screen.*/monitor.*/last-image$")
 
-		for property in $properties; do
-			xfconf-query -c xfce4-desktop -p $property -s "$saveDir$picName"
-		done
-	fi
+	for property in $properties; do
+		xfconf-query -c xfce4-desktop -p $property -s "$saveDir$picName"
+	done
     fi
 
     if [ "$exitAfterRunning" = true ] ; then
@@ -349,4 +365,4 @@ _EOF
 	DIFF_TIME=$(expr $NOW - $LAST_RUN)
 	sleep 60
     done
-done
+done 
