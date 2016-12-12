@@ -4,6 +4,27 @@
 # Description: Download Bing Wallpaper of the Day and set it as your Linux Desktop.
 # https://github.com/marguerite/linux-bing-wallpaper
 
+# global options
+
+# $bing is needed to form the fully qualified URL for
+# the Bing pic of the day
+bing="www.bing.com"
+
+# The idx parameter determines where to start from. 0 is the current day,
+# 1 the previous day, etc.
+idx="0"
+
+# $xmlURL is needed to get the xml data from which
+# the relative URL for the Bing pic of the day is extracted
+xmlURL="http://www.bing.com/HPImageArchive.aspx?format=xml&idx=$idx&n=1&mkt=$mkt"
+
+# Set picture options
+# Valid options are: none,wallpaper,centered,scaled,stretched,zoom,spanned
+picOpts="stretched"
+
+# The file extension for the Bing pic
+picExt=".jpg"
+
 contains() {
     local value=$(eval "echo \$$#")
     count=1
@@ -28,6 +49,13 @@ checkdep() {
 		echo "Exit."
 		exit 1
 	fi
+}
+
+ctfn () {
+	tfnns=$(mktemp /tmp/bing_wallpaper_XXXXXX)
+	tfn="$tfnns$picExt"
+	mv "$tfnns" "$tfn"
+	echo "$tfn"
 }
 
 detectDE() {
@@ -166,35 +194,6 @@ else
   exit 1
 fi
 
-# $bing is needed to form the fully qualified URL for
-# the Bing pic of the day
-bing="www.bing.com"
-
-# The idx parameter determines where to start from. 0 is the current day,
-# 1 the previous day, etc.
-idx="0"
-
-# $xmlURL is needed to get the xml data from which
-# the relative URL for the Bing pic of the day is extracted
-xmlURL="http://www.bing.com/HPImageArchive.aspx?format=xml&idx=$idx&n=1&mkt=$mkt"
-
-# $saveDir is used to set the location where Bing pics of the day
-# are stored.  $HOME holds the path of the current user's home directory
-saveDir="/tmp/"
-
-# Create saveDir if it does not already exist
-mkdir -p $saveDir
-
-# Set picture options
-# Valid options are: none,wallpaper,centered,scaled,stretched,zoom,spanned
-picOpts="stretched"
-
-# The file extension for the Bing pic
-picExt=".jpg"
-
-# Initialize counter for mac pictures
-maccount=1
-
 # Download the highest resolution
 while true; do
 
@@ -203,35 +202,35 @@ while true; do
     
     for picRes in _1920x1200 _1366x768 _1280x720 _1024x768; do
 
-	    # Extract the relative URL of the Bing pic of the day from
-	    # the XML data retrieved from xmlURL, form the fully qualified
-	    # URL for the pic of the day, and store it in $picURL
-	    picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<urlBase>(.*)</urlBase>" | cut -d ">" -f 2 | cut -d "<" -f 1)$picRes$picExt
-	    
-	    # $picName contains the filename of the Bing pic of the day
-	    # picName=${picURL##*/}
-	    picName="bing_wallpaper_$$$picExt"
-	
-	    # Download the Bing pic of the day
-	    curl -H "Content-Type: text/html; charset=UTF-8" -s -o $saveDir$picName -L "$picURL"
-	
-	    # Test if download was successful.
-	    downloadResult=$?
-	    if [ $downloadResult -ge 1 ]; then
-		rm -f $saveDir$picName && continue
-	    elif [ ! -s $saveDir$picName ]; then
-	    	rm -f $saveDir$picName && continue   
-	    fi
-	    
-	    if [ -x "/usr/bin/convert" -a -x "/usr/bin/mogrify" ]; then
-	    	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
-	    	convert $saveDir$picName -resize 1920x1200 $saveDir$picName
-		convert -background "#00000080" -fill white -gravity center -size 1024 -font "Droid Sans" -pointsize 22 caption:"${title}" $saveDir$picName +swap -gravity south -composite $saveDir$picName
-    	    fi
-	    # Test if it's a pic
-	    file --mime-type -b $saveDir$picName | grep "^image/" > /dev/null && break
-	
-	    rm -f $saveDir$picName
+	# Extract the relative URL of the Bing pic of the day from
+	# the XML data retrieved from xmlURL, form the fully qualified
+	# URL for the pic of the day, and store it in $picURL
+	picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<urlBase>(.*)</urlBase>" | cut -d ">" -f 2 | cut -d "<" -f 1)$picRes$picExt
+
+
+	# set target filename
+	tfn=$(ctfn)
+
+	# Download the Bing pic of the day
+	curl -H "Content-Type: text/html; charset=UTF-8" -s -o "$tfn" -L "$picURL"
+
+	# Test if download was successful.
+	downloadResult=$?
+	if [ $downloadResult -ge 1 ]; then
+	rm -f "$tfn" && continue
+	elif [ ! -s "$tfn" ]; then
+	rm -f "$tfn" && continue   
+	fi
+
+	if [ -x "/usr/bin/convert" -a -x "/usr/bin/mogrify" ]; then
+	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
+	convert "$tfn" -resize 1920x1200 "$tfn"
+	convert -background "#00000080" -fill white -gravity center -size 1024 -font "Droid Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity south -composite "$tfn"
+	fi
+	# Test if it's a pic
+	file --mime-type -b "$tfn" | grep "^image/" > /dev/null && break
+
+	rm -f "$tfn"
     done
 
     if [ $downloadResult -ge 1 ]; then
@@ -245,25 +244,25 @@ while true; do
 
     if [ "$DE" = "cinnamon" ]; then
           # Set the Cinnamon wallpaper
-          DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.cinnamon.desktop.background picture-uri '"file://'$saveDir$picName'"'
+          DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.cinnamon.desktop.background picture-uri '"file://'$tfn'"'
 
           # Set the Cinnamon wallpaper picture options
           DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.cinnamon.desktop.background picture-options $picOpts
     elif [ "$DE" = "gnome" ]; then
 	checkdep "gconftool"
 	# Set the GNOME 2 wallpaper
-	gconftool-2 -s -t string /desktop/gnome/background/picture_filename "$saveDir$picName"
+	gconftool-2 -s -t string /desktop/gnome/background/picture_filename "$tfn"
 	
 	# Set the GNOME 2 wallpaper picture options
 	gconftool-2 -s -t string /desktop/gnome/background/picture_options "$picOpts"
     elif [ "$DE" = "gnome3" ]; then
 	checkdep "gsettings"
 	# Set the GNOME3 wallpaper
-	DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-uri '"file://'$saveDir$picName'"'
+	DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
 
 	# Set the GNOME 3 wallpaper picture options
 	DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-options $picOpts
-	gsettings set org.gnome.desktop.background picture-uri '"file://'$saveDir$picName'"'
+	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
     elif [ "$DE" = "kde" ]; then
 	checkdep "xdotool"
 	checkdep "gettext"
@@ -282,7 +281,7 @@ while true; do
 
 	js=$(mktemp)
 	cat << _EOF > $js
-var wallpaper = "$saveDir$picName";
+var wallpaper = "$tfn";
 var activity = activities()[0];
 activity.currentConfigGroup = new Array("Wallpaper", "image");
 activity.writeConfig("wallpaper", wallpaper);
@@ -294,59 +293,32 @@ _EOF
 	rm -f "$js"
 
     elif [ "$DE" = "lxqt" ] ; then
-      pcmanfm-qt -w $saveDir$picName
+      pcmanfm-qt -w "$tfn"
     elif [ "$DE" = "mac" ]; then
-	fn=$saveDir$picName
-	# python - $fn << EOF
-# from appscript import app, mactypes
-# import argparse
-#
-# def __main__():
-#  parser = argparse.ArgumentParser(description='Set desktop wallpaper.')
-#  parser.add_argument('file', type=file, help='File to use as wallpaper.')
-#  args = parser.parse_args()
-#  f = args.file
-  # app('finder').desktop_picture.set(mactypes.File(f.name))
-  # se = app('System Events')
-  # desktops = se.desktops.display_name.get()
-  # for d in desktops:
-  #  desk = se.desktops[its.display_name == d]
-  #  desk.picture.set(mactypes.File(f.name))
-#
-#
-# __main__()
-#
-# EOF	
-	maccount=$(expr $maccount + 1)
-	fnnew="bing_wallpaper_$$$maccount$picExt"
-	fnnew=$saveDir$fnnew
-	mv $fn $fnnew
-	rm -f $fnold
+	# set target filename 4 mac
+	tfnnew=$(ctfn)
+	
+	mv $tfn $tfnnew
+	rm -f $tfnold
 
-	osascript -e 'tell application "Finder" to set desktop picture to POSIX file "'"$fnnew"'"'
+	osascript -e 'tell application "Finder" to set desktop picture to POSIX file "'"$tfnnew"'"'
 	osafirstResult=$?
-	osascript -e 'tell application "System Events" to set picture of every desktop to "'"$fnnew"'"'
+	osascript -e 'tell application "System Events" to set picture of every desktop to "'"$tfnnew"'"'
 	osasecondResult=$?
-	sqlite3 ~/Library/Application\ Support/Dock/desktoppicture.db "update data set value = '$fnnew'" 2>&1 >/dev/null
+	sqlite3 ~/Library/Application\ Support/Dock/desktoppicture.db "update data set value = '$tfnnew'" 2>&1 >/dev/null
 	sqliteResult=$?
 
-	fnold=$fnnew
-	# if [ $osafirstResult -ge 1 -a $osasecondResult -ge 1 -a $sqliteResult -ge 1 ]; then
-	#	echo "Failed to refresh desktop image."
-	#        echo "Try again in 60 seconds."
-	#	sleep 60
-	#	continue
-	# fi
+	tfnold=$tfnnew
     elif [ "$DE" = "mate" ]; then
       checkdep "dconf"
-      dconf write /org/mate/desktop/background/picture-filename '"'$saveDir$picName'"'
+      dconf write /org/mate/desktop/background/picture-filename '"'$tfn'"'
     elif [ "$DE" = "xfce" ]; then
 	checkdep "xfconf-query"
 	# set to every monitor that contains image-path/last-image
 	properties=$(xfconf-query -c xfce4-desktop -p /backdrop -l | grep -e "screen.*/monitor.*image-path$" -e "screen.*/monitor.*/last-image$")
 
 	for property in $properties; do
-		xfconf-query -c xfce4-desktop -p $property -s "$saveDir$picName"
+		xfconf-query -c xfce4-desktop -p $property -s "$tfn"
 	done
     fi
 
