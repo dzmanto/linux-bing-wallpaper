@@ -42,7 +42,7 @@ will download a <a href="http://www.bing.com">bing</a> wallpaper of the day dest
 
 2. Right-click the file and select installation. You may get prompted to enter a superuser password since the target folder for <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/bing_wallpaper.sh">bing_wallpaper.sh</a> is /usr/bin. If you are familiar with the command line, you may as well run <br>
 ``dpkg -i linux-bing-wallpaper.deb``.
-3. Make it autostart (see the below comments for Mac OSX®, in <a href="https://www.ubuntu.com/">Ubuntu</a> gnome-session-properties is your friend). The next time you start your machine, linux-bing-wallpaper will run.
+3. Make it a startup item (see the below comments for Mac OSX®, in <a href="https://www.ubuntu.com/">Ubuntu</a> gnome-session-properties is also your friend). The next time you start your machine, linux-bing-wallpaper will run.
 
 ### Installation for admins
 1. Download the <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/bing_wallpaper.sh">bing_wallpaper.sh</a> script.
