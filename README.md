@@ -23,29 +23,35 @@ Linux-bing-wallpaper comes with two options <b>market</b> and <b>runonce</b>. If
 <b>runonce</b>: If a value for the <b>market</b> option has been specified, a value will also be expected for the <b>runonce</b> option. The value for the <b>runonce</b> option can be either true or false. If set to true, linux-bing-wallpaper will run once and stop. If set to false, linux-bing-wallpaper will run every twelve hours. If your machine is down at the time linux-bing-wallpaper tries to load a wallpaper, execution will be delayed until your computer wakes up.
 
 ## Example
-The command
+
+* The command
 ```
 bing-wallpaper.sh en-US true
 ```
 will download a <a href="http://www.bing.com">bing</a> wallpaper of the day destined for the US. The script will download the wallpaper, set it as your desktop wallpaper, and then exit.
 
-The command
+* The command
 ```
 bing-wallpaper.sh en-US false
 ```
 will download a <a href="http://www.bing.com">bing</a> wallpaper of the day destined for the US. The script will download the wallpaper, and set it as your desktop wallpaper. Linux-bing-wallpaper will try and load another wallpaper of the day every twelve hours.
 
 ## Installation
+### Installation for users
+1. Download the <a href="https://github.com/dzmanto/linux-bing-wallpaper/releases/latest">debian package for linux-bing-wallpaper</a>.
 
-Download the <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/bing_wallpaper.sh">bing_wallpaper.sh</a> script.
+2. Right-click the file and select installation. You may get prompted to enter a superuser password since the target folder for <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/bing_wallpaper.sh">bing_wallpaper.sh</a> is /usr/bin. If you are familiar with the command line, you may as well run 
+`dpkg -i linux-bing-wallpaper.deb`.
+3. Make it autostart (see the below comments for Mac OSX®, in <a href="https://www.ubuntu.com/">Ubuntu</a> gnome-session-properties is your friend). The next time you start your machine, linux-bing-wallpaper will run.
 
-Put it somewhere (such as the folder /usr/bin).
+### Installation for admins
+1. Download the <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/bing_wallpaper.sh">bing_wallpaper.sh</a> script.
 
-Give the script execution permissions (chmod +x).
+2. Put it somewhere (such as the folder /usr/bin).
 
-Make it autostart (see the below comments for Mac OSX®, in <a href="https://www.ubuntu.com/">Ubuntu</a> gnome-session-properties is your friend).
+3. Give the script execution permissions (chmod +x).
 
-The next time you start your machine, linux-bing-wallpaper will run.
+4. Make it autostart (see the below comments for Mac OSX®, in <a href="https://www.ubuntu.com/">Ubuntu</a> gnome-session-properties is your friend). The next time you start your machine, linux-bing-wallpaper will run.
 
 ## Commands for installation & first steps
 ```
