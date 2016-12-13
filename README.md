@@ -22,7 +22,7 @@ Linux-bing-wallpaper comes with two options <b>market</b> and <b>runonce</b>. If
 
 <b>runonce</b>: If a value for the <b>market</b> option has been specified, a value will also be expected for the <b>runonce</b> option. The value for the <b>runonce</b> option can be either true or false. If set to true, linux-bing-wallpaper will run once and stop. If set to false, linux-bing-wallpaper will run every twelve hours. If your machine is down at the time linux-bing-wallpaper tries to load a wallpaper, execution will be delayed until your computer wakes up.
 
-## Example
+## Examples
 
 * The command
 ```
