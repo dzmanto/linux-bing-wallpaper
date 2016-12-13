@@ -73,9 +73,9 @@ Similarly, startup functionality can be disabled via <a href="https://github.com
 cd /usr/bin
 su
 # download the script
-wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/bing_wallpaper.sh -o bin/bing_wallpaper.sh
+wget https://raw.githubusercontent.com/dzmanto/linux-bing-wallpaper/master/bing_wallpaper.sh
 # mark the script as executable
-chmod +x bin/*.sh
+chmod +x bing_wallpaper.sh
 exit
 
 # Run linux-bing-wallpaper with default settings
