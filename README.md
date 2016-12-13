@@ -54,11 +54,14 @@ will download a <a href="http://www.bing.com">bing</a> wallpaper of the day dest
 4. Make it autostart (see the below comments for Mac OSX®, in <a href="https://www.ubuntu.com/">Ubuntu</a> gnome-session-properties is your friend). The next time you start your machine, linux-bing-wallpaper will run.
 
 ## Autostart through cron the easy way (tried and tested also on Mac OSX® computers)
-I made available a <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/crontab_install.sh">crontab install script</a> to make linux-bing-wallpaper autostart. The script invokes
+A <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/crontab_install.sh">crontab install script</a> is available to make linux-bing-wallpaper autostart. The script invokes
 ```
 ( crontab -l ; echo "@reboot /usr/bin/bing_wallpaper.sh" ) | crontab - 2>&1 >/dev/null
 ```
-Similarly, the autostart functionality can be removed via <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/crontab_uninstall.sh">another script</a>
+Similarly, the autostart functionality can be disabled via <a href="https://github.com/dzmanto/linux-bing-wallpaper/blob/master/crontab_remove.sh">another script</a>. The latter script invokes
+```
+( crontab -l | grep ^"\/usr\/bin\/bing_wallpaper.sh" ) | crontab -
+```
 
 ## Autostart through cron, if the easy way does not work (crontab -e for your user)
 ```
