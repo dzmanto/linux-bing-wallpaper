@@ -88,6 +88,10 @@ detectDE() {
            DE="cinnamon"
            ;; 
       esac
+   else
+      # DE not found, maybe used WM
+      DE="WM"
+
     fi
 
     if [ x"$DE" = x"" ]; then
@@ -127,6 +131,24 @@ detectDE() {
     
     echo $DE
 }
+
+helpme() {
+echo "Usage: bing_wallpaper.sh [market,runonce]"
+echo "Generic option:"
+echo "       --help show this help"
+echo "Wallpaper parameters:"
+echo "       market: de_CH, de_DE, en_AU, en_CA, en_NZ, en_UK, en-US, ja_JP, or zh_CN"
+echo "       runonce: true or false"
+echo "       Note that market and runonce must be specified together or not at all."
+}
+
+for j
+do
+if [ "$j" = "--help" -o "$j" = "-h" ]; then
+	helpme
+	exit
+fi
+done
 
 checkdep "curl"
 checkdep "egrep"
@@ -274,9 +296,9 @@ while true; do
 	if [ -n $LOCALE ]; then
 		JS_CONSOLE1=$(LANGUAGE=$LOCALE gettext -d plasma-desktop -s "$EN_CONSOLE1")
 		JS_CONSOLE2=$(LANGUAGE=$LOCALE gettext -d plasma-desktop -s "$EN_CONSOLE2")
-		JS_CONSOLE="$JS_CONSOLE1 â€“ $JS_CONSOLE2"
+		JS_CONSOLE="$JS_CONSOLE1 – $JS_CONSOLE2"
 	else
-		JS_CONSOLE="$EN_CONSOLE1 â€“ $EN_CONSOLE2"
+		JS_CONSOLE="$EN_CONSOLE1 – $EN_CONSOLE2"
 	fi
 
 	js=$(mktemp)
@@ -320,6 +342,9 @@ _EOF
 	for property in $properties; do
 		xfconf-query -c xfce4-desktop -p $property -s "$tfn"
 	done
+     elif [ $DE = "WM" ]]; then
+	checkdep "feh"
+	feh --bg-tile "$tfn"
     fi
 
     if [ "$exitAfterRunning" = true ] ; then

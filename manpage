@@ -1,0 +1,52 @@
+.TH bing_wallpaper.sh 1 "20 December 2016" Linux "User Manuals"
+.SH NAME
+linux-bing-wallpaper \- set the bing® wallpaper of the day as your desktop wallpaper
+.SH SYNOPSIS
+.B bing_wallpaper.sh [
+.I market,runonce
+.B ]
+.SH DESCRIPTION
+The linux-bing-wallpaper shell script sets the bing® wallpaper of the day as your Mac 
+OSX® or linux desktop. It features support for Mac OSX®, Ubuntu Unity®, GNOME (2 
+and 3), Mate, KDE4, and XFCE4.
+.SH OPTIONS
+Linux-bing-wallpaper comes with two options 
+.I market 
+and 
+.I runonce
+\&. If 
+.I market 
+is specified, 
+.I runonce 
+will have to be specified as well. That is, the two options 
+.I market
+and 
+.I runonce
+may either be specified together or not at all.
+.IP market
+Bing® provides wallpapers for a range of regional markets. Users may specify a value 
+for the 
+.I market 
+option that matches their region. Linux-bing-wallpaper accepts the 
+following values for the 
+.I market 
+option: de_CH, de_DE, en_AU, en_CA, en_NZ, en_UK, 
+en-US, ja_JP, or zh_CN.
+.IP runonce
+If a value for the 
+.I market 
+option has been specified, a value will also be expected 
+for the 
+.I runonce 
+option. The value for the 
+.I runonce 
+option can be either true or false. 
+If set to true, linux-bing-wallpaper will run once and stop. If set to false, 
+linux-bing-wallpaper will run every twelve hours. If your machine is down at the time 
+linux-bing-wallpaper tries to load a wallpaper, execution will be delayed until your 
+computer wakes up.
+.SH AUTHOR
+Daniela MANTOVANI <dzmanto at hotmail dot com>
+.SH "SEE ALSO"
+.BR curl(1),
+.BR imagemagick(1)
