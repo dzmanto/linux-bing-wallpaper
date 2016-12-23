@@ -216,6 +216,9 @@ else
   exit 1
 fi
 
+# set target filename
+tfn=$(ctfn)
+
 # Download the highest resolution
 while true; do
 
@@ -228,10 +231,6 @@ while true; do
 	# the XML data retrieved from xmlURL, form the fully qualified
 	# URL for the pic of the day, and store it in $picURL
 	picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<urlBase>(.*)</urlBase>" | cut -d ">" -f 2 | cut -d "<" -f 1)$picRes$picExt
-
-
-	# set target filename
-	tfn=$(ctfn)
 
 	# Download the Bing pic of the day
 	curl -H "Content-Type: text/html; charset=UTF-8" -s -o "$tfn" -L "$picURL"
