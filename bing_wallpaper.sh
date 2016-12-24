@@ -90,8 +90,9 @@ detectDE() {
       esac
    else
       # DE not found, maybe used WM
-      DE="WM"
-
+      if [ -z "$DE" ]; then
+      	DE="WM"
+      fi
     fi
 
     if [ x"$DE" = x"" ]; then
@@ -313,7 +314,7 @@ _EOF
 	xdotool search --name "$JS_CONSOLE" windowactivate key ctrl+e key ctrl+w
 	rm -f "$js"
 
-    elif [ "$DE" = "lxqt" ] ; then
+    elif [ "$DE" = "lxqt" ]; then
       pcmanfm-qt -w "$tfn"
     elif [ "$DE" = "mac" ]; then
 	# set target filename 4 mac
@@ -341,7 +342,7 @@ _EOF
 	for property in $properties; do
 		xfconf-query -c xfce4-desktop -p $property -s "$tfn"
 	done
-     elif [ $DE = "WM" ]]; then
+     elif [ $DE = "WM" ]; then
 	checkdep "feh"
 	feh --bg-tile "$tfn"
     fi
