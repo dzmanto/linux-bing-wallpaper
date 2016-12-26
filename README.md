@@ -1,7 +1,7 @@
 # Linux-bing-wallpaper
 
 ## Name
-linux-bing-wallpaper - set the <a href="http://www.bing.com">bing</a> wallpaper of the day as your desktop wallpaper
+linux-bing-wallpaper - set the <a href="http://www.bing.com">bing®</a> wallpaper of the day as your desktop wallpaper
 
 ![][bangimage]
 [bangimage]: http://download-codeplex.sec.s-msft.com/Download?ProjectName=bang&DownloadId=1436017
