@@ -18,7 +18,7 @@ The linux-bing-wallpaper shell script sets the <a href="http://www.bing.com">bin
 
 Linux-bing-wallpaper comes with two options <b>market</b> and <b>runonce</b>. If <b>market</b> is specified, <b>runonce</b> will have to be specified as well. That is, the two options <b>market</b> and <b>runonce</b> may either be specified together or not at all.
 
-<b>market</b>: <a href="http://www.bing.com">Bing</a> provides wallpapers for a range of regional markets. Users may specify a value for the  <b>market</b> option that matches their region. Linux-bing-wallpaper accepts the following values for the <b>market</b> option: de_CH, de_DE, en_AU, en_CA, en_NZ, en_UK, en-US, ja_JP, or zh_CN.
+<b>market</b>: <a href="http://www.bing.com">Bing®</a> provides wallpapers for a range of regional markets. Users may specify a value for the  <b>market</b> option that matches their region. Linux-bing-wallpaper accepts the following values for the <b>market</b> option: de_CH, de_DE, en_AU, en_CA, en_NZ, en_UK, en-US, ja_JP, or zh_CN.
 
 <b>runonce</b>: If a value for the <b>market</b> option has been specified, a value will also be expected for the <b>runonce</b> option. The value for the <b>runonce</b> option can be either true or false. If set to true, linux-bing-wallpaper will run once and stop. If set to false, linux-bing-wallpaper will run every twelve hours. If your machine is down at the time linux-bing-wallpaper tries to load a wallpaper, execution will be delayed until your computer wakes up.
 
@@ -28,13 +28,13 @@ Linux-bing-wallpaper comes with two options <b>market</b> and <b>runonce</b>. If
 ``
 bing-wallpaper.sh en-US true
 ``
-will download a <a href="http://www.bing.com">bing</a> wallpaper of the day destined for the US. The script will download the wallpaper, set it as your desktop wallpaper, and then exit.
+will download a <a href="http://www.bing.com">bing®</a> wallpaper of the day destined for the US. The script will download the wallpaper, set it as your desktop wallpaper, and then exit.
 
 * The command
 ``
 bing-wallpaper.sh en-US false
 ``
-will download a <a href="http://www.bing.com">bing</a> wallpaper of the day destined for the US. The script will download the wallpaper, and set it as your desktop wallpaper. Linux-bing-wallpaper will try and load another wallpaper of the day every twelve hours.
+will download a <a href="http://www.bing.com">bing®</a> wallpaper of the day destined for the US. The script will download the wallpaper, and set it as your desktop wallpaper. Linux-bing-wallpaper will try and load another wallpaper of the day every twelve hours.
 
 ## Installation
 ### Installation for users
