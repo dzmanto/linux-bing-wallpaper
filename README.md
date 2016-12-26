@@ -12,7 +12,7 @@ bing_wallpaper.sh [market,runonce]
 
 ## Description
 
-The linux-bing-wallpaper shell script sets the <a href="http://www.bing.com">bing</a> wallpaper of the day as your Mac OSX® or linux desktop. It features support for Mac OSX®, <a href="https://www.ubuntu.com/">Ubuntu</a> Unity®, <a href="https://www.gnome.org/">GNOME (2 and 3)</a>, <a href="http://mate-desktop.org/">Mate</a>, <a href="https://www.kde.org/">KDE4</a>, and <a href="http://xfce.org/">XFCE4</a>.
+The linux-bing-wallpaper shell script sets the <a href="http://www.bing.com">bing®</a> wallpaper of the day as your Mac OSX® or linux desktop. It features support for Mac OSX®, <a href="https://www.ubuntu.com/">Ubuntu</a> Unity®, <a href="https://www.gnome.org/">GNOME (2 and 3)</a>, <a href="http://mate-desktop.org/">Mate</a>, <a href="https://www.kde.org/">KDE4</a>, and <a href="http://xfce.org/">XFCE4</a>.
 
 ## Options
 
