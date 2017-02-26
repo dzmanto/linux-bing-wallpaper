@@ -226,7 +226,7 @@ while true; do
     picName=""
     picURL=""
     
-    for picRes in _1920x1200 _1366x768 _1280x720 _1024x768; do
+    for picRes in _1920x1200 _1920x1080 _1366x768 _1280x720 _1024x768; do
 
 	# Extract the relative URL of the Bing pic of the day from
 	# the XML data retrieved from xmlURL, form the fully qualified
