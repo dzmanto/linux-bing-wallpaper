@@ -66,36 +66,31 @@ detectDE() {
 
     if [ -n "${XDG_CURRENT_DESKTOP}" ]; then
       case "${XDG_CURRENT_DESKTOP}" in
-         'GNOME')
+         'GNOME'|'gnome')
            DE="gnome"
            ;;
-         'KDE')
+         'KDE'|'kde')
            DE="kde"
            ;;
-         'LXDE')
+         'LXDE'|'lxde')
            DE="lxde"
            ;;
-         'LXQt')
+         'LXQt'|'lxqt')
            DE="lxqt"
            ;;
-         'MATE')
+         'MATE'|'mate')
            DE="mate"
            ;;
-         'XFCE')
+         'XFCE'|'xfce')
            DE="xfce"
            ;;
-         'X-Cinnamon')
+         'X-Cinnamon'|'x-cinnamon')
            DE="cinnamon"
            ;; 
       esac
-   else
-      # DE not found, maybe used WM
-      if [ -z "$DE" ]; then
-      	DE="WM"
-      fi
     fi
 
-    if [ x"$DE" = x"" ]; then
+    if [ -z "$DE" ]; then
       # classic fallbacks
       if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE="kde";
       elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE="gnome";
@@ -106,19 +101,19 @@ detectDE() {
       fi
     fi
 
-    if [ x"$DE" = x"" ]; then
+    if [ -z "$DE" ]; then
       # fallback to checking $DESKTOP_SESSION
      case "$DESKTOP_SESSION" in
          'gnome')
            DE="gnome"
            ;;
-         'LXDE'|'Lubuntu')
+         'LXDE'|'Lubuntu'|'lxde'|'lubuntu')
            DE="lxde"
            ;;
-         'MATE')
+         'MATE'|'mate')
            DE="mate"
            ;;
-         'xfce'|'xfce4'|'Xfce Session')
+         'xfce'|'xfce4'|'Xfce Session'|'xfce session')
            DE="xfce"
            ;;
       esac
@@ -128,6 +123,11 @@ detectDE() {
       # gnome-default-applications-properties is only available in GNOME 2.x
       # but not in GNOME 3.x
       which gnome-default-applications-properties > /dev/null 2>&1  || DE="gnome3"
+    fi
+    
+    # DE not found, maybe used WM
+    if [ -z "$DE" ]; then
+     	DE="WM"
     fi
     
     echo $DE
@@ -314,7 +314,13 @@ _EOF
 	xdotool search --name "$JS_CONSOLE" windowactivate key ctrl+e key ctrl+w
 	rm -f "$js"
 
+    elif [ "$DE" = "lxde" ]; then
+      checkdep "pcmanfm"
+      pcmanfm -w "$tfn"
+      pcmanfm --wallpaper-mode=center
+      pcmanfm --wallpaper-mode=stretch
     elif [ "$DE" = "lxqt" ]; then
+      checkdep "pcmanfm-qt"
       pcmanfm-qt -w "$tfn"
     elif [ "$DE" = "mac" ]; then
 	# set target filename 4 mac
