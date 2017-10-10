@@ -1,8 +1,8 @@
 #!/bin/sh
 # Author: Marguerite Su <i@marguerite.su>, dzmanto <dzmanto@hotmail.com>
 # License: GPL-3.0
-# Description: Download Bing Wallpaper of the Day and set it as your Linux Desktop.
-# https://github.com/marguerite/linux-bing-wallpaper
+# Description: Download bing wallpaper of the day and set it as your linux desktop.
+# https://github.com/dzmanto/linux-bing-wallpaper/
 
 # global options
 
@@ -22,8 +22,11 @@ xmlURL="http://www.bing.com/HPImageArchive.aspx?format=xml&idx=$idx&n=1&mkt=$mkt
 # Valid options are: none,wallpaper,centered,scaled,stretched,zoom,spanned
 picOpts="stretched"
 
-# The file extension for the Bing pic
+# the file extension for the Bing pic
 picExt=".jpg"
+
+# tackle zsh particularities
+rake='noglob rake'
 
 contains() {
     local value=$(eval "echo \$$#")
@@ -220,6 +223,8 @@ fi
 # set target filename
 tfn=$(ctfn)
 
+DE=$(detectDE)
+
 # Download the highest resolution
 while true; do
 
@@ -239,15 +244,32 @@ while true; do
 	# Test if download was successful.
 	downloadResult=$?
 	if [ $downloadResult -ge 1 ]; then
-	rm -f "$tfn" && continue
+		rm -f "$tfn" && continue
 	elif [ ! -s "$tfn" ]; then
-	rm -f "$tfn" && continue   
+		rm -f "$tfn" && continue   
 	fi
 
 	if [ -x "/usr/bin/convert" -a -x "/usr/bin/mogrify" ]; then
 	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
-	convert "$tfn" -resize 1920x1200 "$tfn"
-	convert -background "#00000080" -fill white -gravity center -size 1024 -font "Droid Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity south -composite "$tfn"
+	/usr/bin/convert "$tfn" -resize 1920x1200 "$tfn"
+
+	
+	grav="south"
+	if [ "$DE" = "WM" ]; then
+		grav="north"
+	fi
+
+	iswc=$(which wc)
+	if [ -x $iswc ]; then
+		isBitStream=$(/usr/bin/convert -list font | grep "Bitstream-Vera-Sans" | wc -l)
+		isDejaVu=$(/usr/bin/convert -list font | grep "DejaVu-Sans" | wc -l)
+		if [ $isBitStream -ge 1 ]; then
+			/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "Bitstream-Vera-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
+		elif [ $isDejaVu -ge 1 ]; then
+			/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "DejaVu-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
+		fi
+	fi
+
 	fi
 	# Test if it's a pic
 	file --mime-type -b "$tfn" | grep "^image/" > /dev/null && break
@@ -261,8 +283,6 @@ while true; do
           sleep 60
           continue
     fi
-
-    DE=$(detectDE)
 
     if [ "$DE" = "cinnamon" ]; then
           # Set the Cinnamon wallpaper
@@ -296,9 +316,9 @@ while true; do
 	if [ -n $LOCALE ]; then
 		JS_CONSOLE1=$(LANGUAGE=$LOCALE gettext -d plasma-desktop -s "$EN_CONSOLE1")
 		JS_CONSOLE2=$(LANGUAGE=$LOCALE gettext -d plasma-desktop -s "$EN_CONSOLE2")
-		JS_CONSOLE="$JS_CONSOLE1 – $JS_CONSOLE2"
+		JS_CONSOLE="$JS_CONSOLE1 â€“ $JS_CONSOLE2"
 	else
-		JS_CONSOLE="$EN_CONSOLE1 – $EN_CONSOLE2"
+		JS_CONSOLE="$EN_CONSOLE1 â€“ $EN_CONSOLE2"
 	fi
 
 	js=$(mktemp)
@@ -350,7 +370,7 @@ _EOF
 	done
      elif [ $DE = "WM" ]; then
 	checkdep "feh"
-	feh --bg-tile "$tfn"
+	feh --bg-fill --no-fehbg "$tfn"
     fi
 
     if [ "$exitAfterRunning" = true ] ; then
