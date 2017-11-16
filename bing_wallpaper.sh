@@ -253,17 +253,20 @@ while true; do
 	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
 	/usr/bin/convert "$tfn" -resize 1920x1200 "$tfn"
 
+	echo $DE
 	
 	grav="south"
 	if [ "$DE" = "WM" ]; then
 		grav="north"
 	fi
+	echo $grav
 
 	iswc=$(which wc)
 	if [ -x $iswc ]; then
 		isBitStream=$(/usr/bin/convert -list font | grep "Bitstream-Vera-Sans" | wc -l)
 		isDejaVu=$(/usr/bin/convert -list font | grep "DejaVu-Sans" | wc -l)
-		if [ $isBitStream -ge 1 ]; then
+		if [ $isBitStream -ge 1 ]; then	
+			echo "bitstream annotating background image"
 			/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "Bitstream-Vera-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
 		elif [ $isDejaVu -ge 1 ]; then
 			/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "DejaVu-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
