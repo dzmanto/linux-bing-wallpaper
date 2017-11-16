@@ -272,7 +272,7 @@ while true; do
 
 	fi
 	# Test if it's a pic
-	file --mime-type -b "$tfn" | grep "^image/" > /dev/null && break
+	file -L --mime-type -b "$tfn" | grep "^image/" > /dev/null && break
 
 	rm -f "$tfn"
     done
