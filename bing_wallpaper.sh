@@ -14,10 +14,6 @@ bing="www.bing.com"
 # 1 the previous day, etc.
 idx="0"
 
-# $xmlURL is needed to get the xml data from which
-# the relative URL for the Bing pic of the day is extracted
-xmlURL="http://www.bing.com/HPImageArchive.aspx?format=xml&idx=$idx&n=1&mkt=$mkt"
-
 # Set picture options
 # Valid options are: none,wallpaper,centered,scaled,stretched,zoom,spanned
 picOpts="stretched"
@@ -137,13 +133,25 @@ detectDE() {
 }
 
 helpme() {
-echo "Usage: bing_wallpaper.sh [market,runonce]"
+echo "Usage: bing_wallpaper.sh [market, runonce]"
 echo "Generic option:"
 echo "       --help show this help"
 echo "Wallpaper parameters:"
-echo "       market: de_CH, de_DE, en_AU, en_CA, en_NZ, en_UK, en-US, ja_JP, or zh_CN"
+echo "       market: de-DE, en-AU, en-CA, en-NZ, en-UK, en-US, ja-JP, or zh-CN"
 echo "       runonce: true or false"
 echo "       Note that market and runonce must be specified together or not at all."
+}
+
+sanity() {
+        tool=$(which sed)
+        if [ ! -x "$tool" ]; then
+                return $1
+        fi
+        original_string=$1
+        result_string=$(echo $original_string | sed 's/;//g')
+        result_string=$(echo $result_string | sed 's/&//g')
+        result_string=$(echo $result_string | sed 's/|//g')
+        echo $result_string
 }
 
 for j
@@ -165,31 +173,31 @@ if [ $# -eq 0 ]; then
   # Try and guess language
   ML=$(echo $LANG | cut -f 1 -d .)
   case $ML in
-	'en_US')
+	'en-US')
 	mkt="en-US"
 	;;
-	'zh_CN')
+	'zh-CN')
 	mkt="zh-CN"
 	;;
-	'ja_JP')
+	'ja-JP')
 	mkt="ja-JP"
 	;;
-	'en_AU')
+	'en-AU')
 	mkt="en-AU"
 	;;
-	'en_UK')
+	'en-UK')
 	mkt="en-UK"
 	;;
-	'de_CH')
+	'de-CH')
 	mkt="de-DE"
 	;;
-	'de_DE')
+	'de-DE')
 	mkt="de-DE"
 	;;
-	'en_NZ')
+	'en-NZ')
 	mkt="en-NZ"
 	;;
-	'en_CA')
+	'en-CA')
 	mkt="en-CA"
 	;;
   esac
@@ -198,7 +206,7 @@ if [ $# -eq 0 ]; then
 elif [ $# -eq 2 ]; then
   list="de-DE en-AU en-CA en-NZ en-UK en-US ja-JP zh-CN"
   # Valid values are:
-  firstpar="$1"
+  firstpar=$(sanity "$1")
   #inhibit code injection
   firstpar=$(echo "$firstpar" | sed s/[^a-zA-Z-]// )
   if [ "$(contains $list $firstpar)" = "y" ]; then
@@ -209,14 +217,16 @@ elif [ $# -eq 2 ]; then
     exit 1
   fi
 
-  if [ "$2" = true ]; then
+  secondpar=$(sanity "$2")
+  if [ "$secondpar" = true ]; then
     exitAfterRunning=true
   else
     exitAfterRunning=false
   fi
 
 else
-  echo "Usage: `basename $0` mkt[en-US,zh-CN,ja-JP,en-AU,en-UK,de-DE,en-NZ,en-CA] exitAfterRunning[true,false]"
+  echo "Usage: `basename $0` mkt[de-DE, en-AU, en-CA, en-NZ, en-UK, en-US, ja-JP, zh-CN] exitAfterRunning[true,false]"
+  echo "       Note that market and runonce must be specified together or not at all."
   exit 1
 fi
 
@@ -233,11 +243,15 @@ while true; do
     
     for picRes in _1920x1200 _1920x1080 _1366x768 _1280x720 _1024x768; do
 
+	# $xmlURL is needed to get the xml data from which
+	# the relative URL for the Bing pic of the day is extracted
+	xmlURL="http://www.bing.com/HPImageArchive.aspx?format=xml&idx=$idx&n=1&mkt=$mkt"
+
 	# Extract the relative URL of the Bing pic of the day from
 	# the XML data retrieved from xmlURL, form the fully qualified
 	# URL for the pic of the day, and store it in $picURL
 	picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<urlBase>(.*)</urlBase>" | cut -d ">" -f 2 | cut -d "<" -f 1)$picRes$picExt
-
+	picURL=$(sanity "$picURL")	
 	# Download the Bing pic of the day
 	curl -H "Content-Type: text/html; charset=UTF-8" -s -o "$tfn" -L "$picURL"
 
@@ -251,6 +265,7 @@ while true; do
 
 	if [ -x "/usr/bin/convert" -a -x "/usr/bin/mogrify" ]; then
 	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
+	title=$(sanity "$title")
 	/usr/bin/convert "$tfn" -resize 1920x1200 "$tfn"
 
 	
