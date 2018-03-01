@@ -24,11 +24,17 @@ picExt=".jpg"
 # tackle zsh particularities
 rake='noglob rake'
 
+# tackle two more zsh particularities
+if [ "$ZSH_NAME" = "zsh" ]; then
+	setopt +o nomatch
+	set -o shwordsplit
+fi
+
 contains() {
     local value=$(eval "echo \$$#")
     count=1
     for i in $*
-    do
+     do
         if [ "$i" = "$value" -a $count -lt $# ]; then
             echo "y"
             return 0
@@ -216,7 +222,7 @@ if [ $# -eq 0 ]; then
   exitAfterRunning=false
 
 elif [ $# -eq 2 ]; then
-  list="de-DE en-AU en-CA en-NZ en-UK en-US ja-JP zh-CN"
+  list='de-DE en-AU en-CA en-NZ en-UK en-US ja-JP zh-CN'
   # Valid values are:
   firstpar=$(sanity "$1")
   #inhibit code injection
