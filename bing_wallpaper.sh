@@ -51,7 +51,11 @@ checkdep() {
 }
 
 ctfn () {
-	tfnns=$(mktemp /tmp/bing_wallpaper_XXXXXX)
+	if [ -d $HOME/.cache ]; then
+		tfnns=$(mktemp $HOME/.cache/bing_wallpaper_XXXXXX)
+	else	
+		tfnns=$(mktemp /tmp/bing_wallpaper_XXXXXX)
+	fi	
 	tfn="$tfnns$picExt"
 	mv "$tfnns" "$tfn"
 	echo "$tfn"
@@ -130,6 +134,14 @@ detectDE() {
     fi
     
     echo $DE
+}
+
+doof () {
+	if [ -d $HOME/.cache ]; then
+		find $HOME/.cache/bing_wallpaper_*.jpg -mtime +1 -delete 2>&1 >/dev/null
+	else	
+		find /tmp/bing_wallpaper_*.jpg -mtime +1 -delete 2>&1 >/dev/null
+	fi	
 }
 
 helpme() {
@@ -297,6 +309,8 @@ while true; do
 	  echo "Try again in 60 seconds."
           sleep 60
           continue
+    else
+	  doof
     fi
 
     if [ "$DE" = "cinnamon" ]; then
@@ -314,11 +328,11 @@ while true; do
 	gconftool-2 -s -t string /desktop/gnome/background/picture_options "$picOpts"
     elif [ "$DE" = "gnome3" ]; then
 	checkdep "gsettings"
-	# Set the GNOME3 wallpaper
-	DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
-
-	# Set the GNOME 3 wallpaper picture options
-	DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.gnome.desktop.background picture-options $picOpts
+	# export DBUS_SESSION_BUS_ADDRESS environment variable
+	PID=$(pgrep gnome-session)
+	export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ|cut -d= -f2-)
+	# Set the GNOME3 wallpaper	
+	gsettings set org.gnome.desktop.background picture-options $picOpts
 	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
     elif [ "$DE" = "kde" ]; then
 	checkdep "xdotool"
