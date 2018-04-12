@@ -3,8 +3,6 @@
 ## Name
 linux-bing-wallpaper - set the <a href="http://www.bing.com">bing®</a> wallpaper of the day as your desktop wallpaper
 
-![bangimage](http://download-codeplex.sec.s-msft.com/Download?ProjectName=bang&DownloadId=1436017)
-
 ## Synopsis
 
 bing_wallpaper.sh [market,runonce]
@@ -85,4 +83,6 @@ exit
 # The script will otherwise sleep for twelve hours.
 /usr/bin/bing_wallpaper.sh en-US true
 ```
+
+![](bingimagean_codeplex.jpg)
 <p>A similar solution is <a href="https://github.com/dzmanto/bang">available</a> for Microsoft Windows® machines. </p>
