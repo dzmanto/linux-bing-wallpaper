@@ -3,7 +3,7 @@
 linux-bing-wallpaper \- set the bing® wallpaper of the day as your desktop wallpaper
 .SH SYNOPSIS
 .B bing_wallpaper.sh [
-.I market,runonce
+.I market runonce
 .B ]
 .SH DESCRIPTION
 The linux-bing-wallpaper shell script sets the bing® wallpaper of the day as your Mac 

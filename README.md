@@ -5,7 +5,7 @@ linux-bing-wallpaper - set the <a href="http://www.bing.com">bing®</a> wallpape
 
 ## Synopsis
 
-bing_wallpaper.sh [market,runonce]
+bing_wallpaper.sh [market runonce]
 
 ## Description
 

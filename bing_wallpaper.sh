@@ -151,7 +151,7 @@ doof () {
 }
 
 helpme() {
-echo "Usage: bing_wallpaper.sh [market, runonce]"
+echo "Usage: bing_wallpaper.sh [market runonce]"
 echo "Generic option:"
 echo "       --help show this help"
 echo "Wallpaper parameters:"
