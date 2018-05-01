@@ -268,17 +268,25 @@ while true; do
 	# Extract the relative URL of the Bing pic of the day from
 	# the XML data retrieved from xmlURL, form the fully qualified
 	# URL for the pic of the day, and store it in $picURL
-	picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<urlBase>(.*)</urlBase>" | cut -d ">" -f 2 | cut -d "<" -f 1)$picRes$picExt
+	picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<url>(.*)</url>" | cut -d ">" -f 2 | cut -d "<" -f 1)
 	picURL=$(sanity "$picURL")	
-	# Download the Bing pic of the day
 	curl -H "Content-Type: text/html; charset=UTF-8" -s -o "$tfn" -L "$picURL"
-
-	# Test if download was successful.
 	downloadResult=$?
 	if [ $downloadResult -ge 1 ]; then
-		rm -f "$tfn" && continue
-	elif [ ! -s "$tfn" ]; then
-		rm -f "$tfn" && continue   
+		rm -f "$tfn"
+		picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<urlBase>(.*)</urlBase>" | cut -d ">" -f 2 | cut -d "<" -f 1)$picRes$picExt
+		picURL=$(sanity "$picURL")
+
+		# Download the Bing pic of the day
+		curl -H "Content-Type: text/html; charset=UTF-8" -s -o "$tfn" -L "$picURL"
+
+		# Test if download was successful.
+		downloadResult=$?
+		if [ $downloadResult -ge 1 ]; then
+			rm -f "$tfn" && continue
+		elif [ ! -s "$tfn" ]; then
+			rm -f "$tfn" && continue   
+		fi
 	fi
 
 	if [ -x "/usr/bin/convert" -a -x "/usr/bin/mogrify" ]; then
