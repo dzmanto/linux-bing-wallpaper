@@ -385,6 +385,7 @@ _EOF
     elif [ "$DE" = "lxqt" ]; then
       checkdep "pcmanfm-qt"
       pcmanfm-qt -w "$tfn"
+      pcmanfm-qt --wallpaper-mode=zoom
     elif [ "$DE" = "mac" ]; then
 	# set target filename 4 mac
 	tfnnew=$(ctfn)
