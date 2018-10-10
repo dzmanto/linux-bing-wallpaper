@@ -293,7 +293,6 @@ while true; do
 	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
 	title=$(sanity "$title")
 	/usr/bin/convert "$tfn" -resize 1920x1200 "$tfn"
-
 	
 	grav="south"
 	if [ "$DE" = "WM" ]; then
@@ -343,8 +342,13 @@ while true; do
     elif [ "$DE" = "gnome3" ]; then
 	checkdep "gsettings"
 	# export DBUS_SESSION_BUS_ADDRESS environment variable
-	PID=$(pgrep gnome-session)
-	export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ|cut -d= -f2-)
+	PID1=$(pgrep gnome-session)
+	for PID in $PID1
+	do
+		if [ -r "/proc/$PID/environ" ]; then
+		export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ|cut -d= -f2-)
+		fi
+	done
 	# Set the GNOME3 wallpaper	
 	gsettings set org.gnome.desktop.background picture-options $picOpts
 	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
