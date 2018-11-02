@@ -290,26 +290,25 @@ while true; do
 	fi
 
 	if [ -x "/usr/bin/convert" -a -x "/usr/bin/mogrify" ]; then
-	title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
-	title=$(sanity "$title")
-	/usr/bin/convert "$tfn" -resize 1920x1200 "$tfn"
-	
-	grav="south"
-	if [ "$DE" = "WM" ]; then
-		grav="north"
-	fi
-
-	iswc=$(which wc)
-	if [ -x $iswc ]; then
-		isBitStream=$(/usr/bin/convert -list font | grep "Bitstream-Vera-Sans" | wc -l)
-		isDejaVu=$(/usr/bin/convert -list font | grep "DejaVu-Sans" | wc -l)
-		if [ $isBitStream -ge 1 ]; then
-			/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "Bitstream-Vera-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
-		elif [ $isDejaVu -ge 1 ]; then
-			/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "DejaVu-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
+		title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
+		title=$(sanity "$title")
+		/usr/bin/convert "$tfn" -resize 1920x1200 "$tfn"
+		
+		grav="south"
+		if [ "$DE" = "WM" ]; then
+			grav="north"
 		fi
-	fi
 
+		iswc=$(which wc)
+		if [ -x $iswc ]; then
+			isBitStream=$(/usr/bin/convert -list font | grep "Bitstream-Vera-Sans" | wc -l)
+			isDejaVu=$(/usr/bin/convert -list font | grep "DejaVu-Sans" | wc -l)
+			if [ $isBitStream -ge 1 ]; then
+				/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "Bitstream-Vera-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
+			elif [ $isDejaVu -ge 1 ]; then
+				/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "DejaVu-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
+			fi
+		fi
 	fi
 	# Test if it's a pic
 	file -L --mime-type -b "$tfn" | grep "^image/" > /dev/null && break
