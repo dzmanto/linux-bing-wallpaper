@@ -166,7 +166,8 @@ sanity() {
                 return $1
         fi
         original_string=$1
-        result_string=$(echo $original_string | sed 's/;//g')
+	result_string=$(echo $original_string | sed -e 's/\r//g')     
+	result_string=$(echo $result_string | sed 's/;//g')
         result_string=$(echo $result_string | sed 's/&//g')
         result_string=$(echo $result_string | sed 's/|//g')
         echo $result_string
