@@ -353,20 +353,6 @@ while true; do
 	gsettings set org.gnome.desktop.background picture-options $picOpts
 	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
     elif [ "$DE" = "kde" ]; then
-	checkdep "xdotool"
-	checkdep "gettext"
-	LOCALE=$(echo $LANG | sed 's/\..*$//')
-
-	EN_CONSOLE1="Desktop Shell Scripting Console"
-	EN_CONSOLE2="Plasma Desktop Shell"
-
-	if [ -n $LOCALE ]; then
-		JS_CONSOLE1=$(LANGUAGE=$LOCALE gettext -d plasma-desktop -s "$EN_CONSOLE1")
-		JS_CONSOLE2=$(LANGUAGE=$LOCALE gettext -d plasma-desktop -s "$EN_CONSOLE2")
-		JS_CONSOLE="$JS_CONSOLE1 – $JS_CONSOLE2"
-	else
-		JS_CONSOLE="$EN_CONSOLE1 – $EN_CONSOLE2"
-	fi
 
 	qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'string:
 var Desktops = desktops();                                                                                                                       
@@ -377,8 +363,6 @@ d.currentConfigGroup = Array("Wallpaper","org.kde.image","General");
 d.writeConfig("Image", "'$tfn'");
 }'
 
-	xdotool search --name "$JS_CONSOLE" windowactivate key ctrl+e key ctrl+w
-	rm -f "$js"
 
     elif [ "$DE" = "lxde" ]; then
       checkdep "pcmanfm"
