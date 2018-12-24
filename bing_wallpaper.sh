@@ -368,16 +368,15 @@ while true; do
 		JS_CONSOLE="$EN_CONSOLE1 – $EN_CONSOLE2"
 	fi
 
-	js=$(mktemp)
-	cat << _EOF > $js
-var wallpaper = "$tfn";
-var activity = activities()[0];
-activity.currentConfigGroup = new Array("Wallpaper", "image");
-activity.writeConfig("wallpaper", wallpaper);
-activity.writeConfig("userswallpaper", wallpaper);
-activity.reloadConfig();
-_EOF
-	qdbus org.kde.plasma-desktop /App local.PlasmaApp.loadScriptInInteractiveConsole "$js" > /dev/null
+	qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'string:
+var Desktops = desktops();                                                                                                                       
+for (i=0;i<Desktops.length;i++) {
+d = Desktops[i];
+d.wallpaperPlugin = "org.kde.image";
+d.currentConfigGroup = Array("Wallpaper","org.kde.image","General");
+d.writeConfig("Image", "'$tfn'");
+}'
+
 	xdotool search --name "$JS_CONSOLE" windowactivate key ctrl+e key ctrl+w
 	rm -f "$js"
 
