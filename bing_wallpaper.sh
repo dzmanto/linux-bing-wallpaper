@@ -296,7 +296,7 @@ while true; do
 		/usr/bin/convert "$tfn" -resize 1920x1200 "$tfn"
 		
 		grav="south"
-		if [ "$DE" = "WM" ]; then
+		if [ "$DE" = "WM" -o "$DE" = "kde" ]; then
 			grav="north"
 		fi
 
