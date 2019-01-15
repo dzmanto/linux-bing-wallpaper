@@ -290,6 +290,13 @@ while true; do
 		fi
 	fi
 
+	# Test if it's a pic
+	file -L --mime-type -b "$tfn" | grep "^image/" > /dev/null
+	picStatus=$?
+	if [ $picStatus -ge 1 ]; then
+		rm -f "$tfn" && continue
+	fi
+
 	if [ -x "/usr/bin/convert" -a -x "/usr/bin/mogrify" ]; then
 		title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
 		title=$(sanity "$title")
@@ -311,13 +318,13 @@ while true; do
 			fi
 		fi
 	fi
-	# Test if it's a pic
+	# Test if it's still a pic
 	file -L --mime-type -b "$tfn" | grep "^image/" > /dev/null && break
 
 	rm -f "$tfn"
     done
 
-    if [ $downloadResult -ge 1 ]; then
+    if [ $downloadResult -ge 1 -o $picStatus -ge 1 ]; then
           echo "Failed to download any picture."
 	  echo "Try again in 60 seconds."
           sleep 60
