@@ -324,6 +324,8 @@ while true; do
 	rm -f "$tfn"
     done
 
+    file -L --mime-type -b "$tfn" | grep "^image/" > /dev/null
+    picStatus=$?
     if [ $downloadResult -ge 1 -o $picStatus -ge 1 ]; then
           echo "Failed to download any picture."
 	  echo "Try again in 60 seconds."
