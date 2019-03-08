@@ -166,10 +166,12 @@ sanity() {
                 return $1
         fi
         original_string=$1
+	result_string=$(echo $original_string | sed -e 's/&amp;/vrumfodel_placeholder/g')  
 	result_string=$(echo $original_string | sed -e 's/\r//g')     
 	result_string=$(echo $result_string | sed 's/;//g')
         result_string=$(echo $result_string | sed 's/&//g')
         result_string=$(echo $result_string | sed 's/|//g')
+	result_string=$(echo $original_string | sed -e 's/vrumfodel_placeholder/&amp;/g') 
         echo $result_string
 }
 
@@ -255,6 +257,7 @@ tfn=$(ctfn)
 DE=$(detectDE)
 
 # Download the highest resolution
+
 while true; do
 
     picName=""
