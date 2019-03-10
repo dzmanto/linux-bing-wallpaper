@@ -166,12 +166,18 @@ sanity() {
                 return $1
         fi
         original_string=$1
-	result_string=$(echo $original_string | sed -e 's/&amp;/vrumfodel_placeholder/g')  
+	result_string=$(echo $original_string | sed -e 's/&amp;/vrumfodel_placeholder/g')
+	result_string=$(echo $original_string | sed -e 's/&apos;/apos_placeholder/g')
+	result_string=$(echo $original_string | sed -e 's/&nbsp;/space_placeholder/g')
+	result_string=$(echo $original_string | sed -e 's/&quot;/quotation_placeholder/g')
 	result_string=$(echo $original_string | sed -e 's/\r//g')     
 	result_string=$(echo $result_string | sed 's/;//g')
         result_string=$(echo $result_string | sed 's/&//g')
         result_string=$(echo $result_string | sed 's/|//g')
-	result_string=$(echo $original_string | sed -e 's/vrumfodel_placeholder/&amp;/g') 
+	result_string=$(echo $original_string | sed -e 's/vrumfodel_placeholder/&amp;/g')
+	result_string=$(echo $original_string | sed -e 's/apos_placeholder/&apos;/g')
+	result_string=$(echo $original_string | sed -e 's/space_placeholder/&nbsp;/g')
+	result_string=$(echo $original_string | sed -e 's/quotation_placeholder/&quot;/g')
         echo $result_string
 }
 
