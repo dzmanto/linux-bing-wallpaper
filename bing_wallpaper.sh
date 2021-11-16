@@ -166,24 +166,25 @@ sanity() {
                 return $1
         fi
         original_string=$1
-	result_string=$(echo $original_string | sed -e 's/&amp;/vrumfodel_placeholder/g')
-	result_string=$(echo $original_string | sed -e 's/&apos;/apos_placeholder/g')
-	result_string=$(echo $original_string | sed -e 's/&nbsp;/space_placeholder/g')
-	result_string=$(echo $original_string | sed -e 's/&quot;/quotation_placeholder/g')
-	result_string=$(echo $original_string | sed -e 's/\r//g')     
-	result_string=$(echo $result_string | sed 's/;//g')
-        result_string=$(echo $result_string | sed 's/&//g')
-        result_string=$(echo $result_string | sed 's/|//g')
-	result_string=$(echo $original_string | sed -e 's/vrumfodel_placeholder/&amp;/g')
-	result_string=$(echo $original_string | sed -e 's/apos_placeholder/&apos;/g')
-	result_string=$(echo $original_string | sed -e 's/space_placeholder/&nbsp;/g')
-	result_string=$(echo $original_string | sed -e 's/quotation_placeholder/&quot;/g')
-        echo $result_string
+	result_string=$(echo "$original_string" | sed -e 's|&amp;|vrumfodel_placeholder|g')
+	result_string=$(echo "$result_string" | sed -e 's|&apos;|pos_placeholder|g')
+	result_string=$(echo "$result_string" | sed -e 's|&nbsp;|space_placeholder|g')
+	result_string=$(echo "$result_string" | sed -e 's|&quot;|quotation_placeholder|g')
+	result_string=$(echo "$result_string" | sed -e 's|\r||g')     
+	result_string=$(echo "$result_string" | sed 's|;||g')
+        result_string=$(echo "$result_string" | sed 's|&||g')
+        result_string=$(echo "$result_string" | sed 's/|//g')
+	result_string=$(echo "$result_string" | sed -e 's|vrumfodel_placeholder|\&amp;|g')
+	result_string=$(echo "$result_string" | sed -e 's|apos_placeholder|\&apos;|g')
+	result_string=$(echo "$result_string" | sed -e 's|space_placeholder|\&nbsp;|g')
+	result_string=$(echo "$result_string" | sed -e 's|quotation_placeholder|\&quot;|g')
+	result_string=$(echo "$result_string" | sed -e 's|^www|https://www|g')
+        echo "$result_string"
 }
 
-for j
+for i in $*
 do
-if [ "$j" = "--help" -o "$j" = "-h" ]; then
+if [ "$i" = "-h" -o "$i" = "-help" -o "$i" = "--help" -o "$i" = "-help" ]; then
 	helpme
 	exit
 fi
@@ -279,14 +280,14 @@ while true; do
 	# the XML data retrieved from xmlURL, form the fully qualified
 	# URL for the pic of the day, and store it in $picURL
 	picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<url>(.*)</url>" | cut -d ">" -f 2 | cut -d "<" -f 1)
-	picURL=$(sanity "$picURL")	
+	picURL=$(sanity "$picURL")
+
 	curl -H "Content-Type: text/html; charset=UTF-8" -s -o "$tfn" -L "$picURL"
 	downloadResult=$?
 	if [ $downloadResult -ge 1 ]; then
 		rm -f "$tfn"
 		picURL=$bing$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<urlBase>(.*)</urlBase>" | cut -d ">" -f 2 | cut -d "<" -f 1)$picRes$picExt
 		picURL=$(sanity "$picURL")
-
 		# Download the Bing pic of the day
 		curl -H "Content-Type: text/html; charset=UTF-8" -s -o "$tfn" -L "$picURL"
 
