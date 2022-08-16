@@ -368,9 +368,11 @@ while true; do
 		export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ|cut -d= -f2-)
 		fi
 	done
-	# Set the GNOME3 wallpaper	
+	# set the GNOME3 wallpaper in normal mode & in dark mode
 	gsettings set org.gnome.desktop.background picture-options $picOpts
 	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
+	gsettings set org.gnome.desktop.background picture-uri-dark '"file://'$tfn'"'
+	
     elif [ "$DE" = "kde" ]; then
 
 	qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'string:
