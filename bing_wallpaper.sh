@@ -321,10 +321,13 @@ while true; do
 		if [ -x $iswc ]; then
 			isBitStream=$(/usr/bin/convert -list font | grep "Bitstream-Vera-Sans" | wc -l)
 			isDejaVu=$(/usr/bin/convert -list font | grep "DejaVu-Sans" | wc -l)
+			isNoto=$(/usr/bin/convert -list font | grep "Noto-Sans-CJK-HK" | wc -l)
 			if [ $isBitStream -ge 1 ]; then
 				/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "Bitstream-Vera-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
-			elif [ $isDejaVu -ge 1 ]; then
+			elif [ $isDejaVu -ge 1 -a "$mkt" != "zh-CN" ]; then
 				/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "DejaVu-Sans" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
+			elif [ $isNoto -ge 1 ]; then
+				/usr/bin/convert -background "#00000080" -fill white -gravity center -size 1024 -font "Noto-Sans-CJK-HK" -pointsize 22 caption:"${title}" "$tfn" +swap -gravity "$grav" -composite "$tfn"
 			fi
 		fi
 	fi
@@ -372,7 +375,6 @@ while true; do
 	gsettings set org.gnome.desktop.background picture-options $picOpts
 	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
 	gsettings set org.gnome.desktop.background picture-uri-dark '"file://'$tfn'"'
-	
     elif [ "$DE" = "kde" ]; then
 
 	qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'string:
