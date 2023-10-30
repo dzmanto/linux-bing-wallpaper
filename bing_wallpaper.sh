@@ -310,6 +310,7 @@ while true; do
 	if [ -x "/usr/bin/convert" -a -x "/usr/bin/mogrify" ]; then
 		title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
 		title=$(sanity "$title")
+		echo "convert image $tfn"
 		/usr/bin/convert "$tfn" -resize 1920x1200 "$tfn"
 		
 		grav="south"
@@ -348,6 +349,7 @@ while true; do
 	  doof
     fi
 
+    DE=$(detectDE)
     if [ "$DE" = "cinnamon" ]; then
           # Set the Cinnamon wallpaper
           DISPLAY=:0 GSETTINGS_BACKEND=dconf gsettings set org.cinnamon.desktop.background picture-uri '"file://'$tfn'"'
@@ -371,8 +373,15 @@ while true; do
 		export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ|cut -d= -f2-)
 		fi
 	done
-	# set the GNOME3 wallpaper in normal mode & in dark mode
+	# set the GNOME3 wallpaper twice in normal mode & in dark mode
+	echo "set the gnome3 wallpaper"
 	gsettings set org.gnome.desktop.background picture-options $picOpts
+	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
+	gsettings set org.gnome.desktop.background picture-uri-dark '"file://'$tfn'"'
+	# sleep 1
+	# gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png' 2>&1 >/dev/null
+	# gsettings set org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/warty-final-ubuntu.png' 2>&1 >/dev/null
+	sleep 1
 	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
 	gsettings set org.gnome.desktop.background picture-uri-dark '"file://'$tfn'"'
     elif [ "$DE" = "kde" ]; then
