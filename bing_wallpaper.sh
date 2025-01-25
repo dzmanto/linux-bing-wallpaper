@@ -145,8 +145,10 @@ detectDE() {
 doof () {
 	if [ -d $HOME/.cache ]; then
 		find $HOME/.cache/bing_wallpaper_*.jpg -mtime +1 -delete 2>&1 >/dev/null
+		find $HOME/.cache/bing_wallpaper_*.png -mtime +1 -delete 2>&1 >/dev/null
 	else	
 		find /tmp/bing_wallpaper_*.jpg -mtime +1 -delete 2>&1 >/dev/null
+		find /tmp/bing_wallpaper_*.png -mtime +1 -delete 2>&1 >/dev/null
 	fi	
 }
 
@@ -311,7 +313,16 @@ while true; do
 		title=$(echo $(curl -H "Content-Type: text/html; charset=UTF-8" -L -s $xmlURL) | egrep -o "<copyright>(.*)</copyright>" | cut -d ">" -f 2 | cut -d "<" -f 1 )
 		title=$(sanity "$title")
 		echo "convert image $tfn"
-		/usr/bin/convert "$tfn" -resize 1920x1200 "$tfn"
+		
+		# fix a quirk in gnome3
+		tfnnew=$tfn
+		if [ "$DE" = "gnome3" ]; then
+			tfnnew="$tfn.png"
+		# else
+		#	tfnnew=$tfn
+		fi
+		/usr/bin/convert "$tfn" -resize 1920x1200 "$tfnnew"
+		tfn="$tfnnew"
 		
 		grav="south"
 		if [ "$DE" = "WM" -o "$DE" = "kde" ]; then
@@ -376,12 +387,13 @@ while true; do
 	# set the GNOME3 wallpaper twice in normal mode & in dark mode
 	echo "set the gnome3 wallpaper"
 	gsettings set org.gnome.desktop.background picture-options $picOpts
-	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
-	gsettings set org.gnome.desktop.background picture-uri-dark '"file://'$tfn'"'
-	# sleep 1
+	# I know this looks redundant and mispelled, but it works.
+	# DO NOT ALTER
+	gsettings set org.gnome.desktop.background picture-uri ""; gsettings set org.gnome.desktop.background picture-uri-dark file:///home/user/active_bg.jpe
 	# gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png' 2>&1 >/dev/null
 	# gsettings set org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/warty-final-ubuntu.png' 2>&1 >/dev/null
 	sleep 1
+	gsettings set org.gnome.desktop.background picture-options $picOpts
 	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
 	gsettings set org.gnome.desktop.background picture-uri-dark '"file://'$tfn'"'
     elif [ "$DE" = "kde" ]; then
