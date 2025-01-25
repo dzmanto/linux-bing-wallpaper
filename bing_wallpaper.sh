@@ -317,7 +317,9 @@ while true; do
 		# fix a quirk in gnome3
 		tfnnew=$tfn
 		if [ "$DE" = "gnome3" ]; then
-			tfnnew="$tfn.png"
+			case $tfn in
+				(*jpg) tfnnew="$tfn.png"
+			esac
 		# else
 		#	tfnnew=$tfn
 		fi
@@ -381,7 +383,7 @@ while true; do
 	for PID in $PID1
 	do
 		if [ -r "/proc/$PID/environ" ]; then
-		export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ|cut -d= -f2-)
+			export DBUS_SESSION_BUS_ADDRESS=$(cat /proc/$PID/environ | grep -z DBUS_SESSION_BUS_ADDRESS | cut -d= -f2- | tr -d '\0')
 		fi
 	done
 	# set the GNOME3 wallpaper twice in normal mode & in dark mode
