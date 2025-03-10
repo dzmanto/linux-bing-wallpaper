@@ -388,16 +388,18 @@ while true; do
 	done
 	# set the GNOME3 wallpaper twice in normal mode & in dark mode
 	echo "set the gnome3 wallpaper"
-	gsettings set org.gnome.desktop.background picture-options $picOpts
+	# gsettings set org.gnome.desktop.background picture-options $picOpts
 	# I know this looks redundant and mispelled, but it works.
 	# DO NOT ALTER
-	gsettings set org.gnome.desktop.background picture-uri ""; gsettings set org.gnome.desktop.background picture-uri-dark file:///home/user/active_bg.jpe
+	# gsettings set org.gnome.desktop.background picture-uri ""; gsettings set org.gnome.desktop.background picture-uri-dark file:///home/user/active_bg.jpe
 	# gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png' 2>&1 >/dev/null
 	# gsettings set org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/warty-final-ubuntu.png' 2>&1 >/dev/null
-	sleep 1
+	# sleep 1
+	gsettings set org.gnome.desktop.background draw-background false
 	gsettings set org.gnome.desktop.background picture-options $picOpts
 	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
 	gsettings set org.gnome.desktop.background picture-uri-dark '"file://'$tfn'"'
+	gsettings set org.gnome.desktop.background draw-background true
     elif [ "$DE" = "kde" ]; then
 
 	qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'string:
