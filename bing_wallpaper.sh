@@ -395,11 +395,10 @@ while true; do
 	# gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/warty-final-ubuntu.png' 2>&1 >/dev/null
 	# gsettings set org.gnome.desktop.background picture-uri-dark 'file:///usr/share/backgrounds/warty-final-ubuntu.png' 2>&1 >/dev/null
 	# sleep 1
-	gsettings set org.gnome.desktop.background draw-background false
+	URI="file:///$tfn"
 	gsettings set org.gnome.desktop.background picture-options $picOpts
-	gsettings set org.gnome.desktop.background picture-uri '"file://'$tfn'"'
-	gsettings set org.gnome.desktop.background picture-uri-dark '"file://'$tfn'"'
-	gsettings set org.gnome.desktop.background draw-background true
+	gsettings set org.gnome.desktop.background picture-uri "${URI}"
+	gsettings set org.gnome.desktop.background picture-uri-dark "${URI}"
     elif [ "$DE" = "kde" ]; then
 
 	qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'string:
